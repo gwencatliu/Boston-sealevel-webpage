@@ -21,73 +21,97 @@ async function fetchSeaLevelData(url) {
 
 
 
-    //document object methods DOM
-    
-    let selectedLevels = getSelectedSeaLevels()
-    for(const level of selectedLevels) {
-            if (level=='9'){
-                const layer1 = L.geoJSON(sea9,{
-                    style: function(){
-                        return {fillColor: "red"}
-                    }
-                }).addTo(map);
-                layers.push(layer1)
-            }
-            if (level!='9'){
-
-            }
-            if (level=='21') {
-                   const layer2 = L.geoJSON(sea21,{
-                    style: function(){
-                        return {fillColor: "green"}
-                    }
-                }).addTo(map);
-                layers.push(layer2)
-            }
-            if (level=='36'){
-                const layer3 = L.geoJSON(sea36,{
-                    style: function(){
-                        return {fillColor: "blue"}
-                    }
-                }).addTo(map);
-                layers.push(layer3)
-            }
-                
-
-    }
-    console.log(layers)
-  }
-
-var overlayMaps = {
-    "9 inches": ,
-    "21 inches": 
-};
-
-function getSelectedSeaLevels() {
-    const checkboxes = document.querySelectorAll('input[name="action"]');
-    const selectedSeaLevels = [];
-
-    for(const box of checkboxes){
-        if(box.checked){
-            selectedSeaLevels.push(box.value)
-        }
-    }
-    return selectedSeaLevels;
-  }
-
-  const radioButtons = document.querySelectorAll('input[name="action"]');
-    radioButtons.forEach(radioButton => {
-      radioButton.addEventListener("change", displaySeaLevelDataOnMap);
-    });
-
-function initializeMap(){
-    map = L.map('map').setView([42.3601, -71.0589], 13);
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    let osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '© OpenStreetMap'
-    }).addTo(map);
-}
+    })
 
+let layer1 = L.geoJSON(sea9,{
+                         style: function(){
+                             return {fillColor: "red"}
+                        }
+                     })
 
-initializeMap()
+let layer2 = L.geoJSON(sea21,{
+                         style: function(){
+                             return {fillColor: "green"}
+                        }
+                     })
+let layer3 = L.geoJSON(sea36,{
+                            style: function(){
+                            return {fillColor: "blue"}
+                       }
+                    })   
+
+var map = L.map('map', {
+        center:[42.3601, -71.0589],
+        zoom: 13,
+        layers: [osm, layer1, layer2, layer3]
+    });                   
+var overlayMaps = {
+    "9 in": layer1,
+    "21 in": layer2,
+    '36 in': layer3
+};
+
+var baseMaps = {
+    "OpenStreetMap": osm,
+};
+
+var layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+  }
+  displaySeaLevelDataOnMap() 
+//document object methods DOM
+//     let selectedLevels = getSelectedSeaLevels()
+//     for(const level of selectedLevels) {
+//             if (level=='9'){
+//                 const layer1 = L.geoJSON(sea9,{
+//                     style: function(){
+//                         return {fillColor: "red"}
+//                     }
+//                 }).addTo(map);
+//                 layers.push(layer1)
+//             }
+//             if (level!='9'){
+
+//             }
+//             if (level=='21') {
+//                    const layer2 = L.geoJSON(sea21,{
+//                     style: function(){
+//                         return {fillColor: "green"}
+//                     }
+//                 }).addTo(map);
+//                 layers.push(layer2)
+//             }
+//             if (level=='36'){
+//                 const layer3 = L.geoJSON(sea36,{
+//                     style: function(){
+//                         return {fillColor: "blue"}
+//                     }
+//                 }).addTo(map);
+//                 layers.push(layer3)
+//             }
+                
+
+//     }
+//     console.log(layers)
+//   }
+
+// function getSelectedSeaLevels() {
+//     const checkboxes = document.querySelectorAll('input[name="action"]');
+//     const selectedSeaLevels = [];
+
+//     for(const box of checkboxes){
+//         if(box.checked){
+//             selectedSeaLevels.push(box.value)
+//         }
+//     }
+//     return selectedSeaLevels;
+//   }
+
+//   const radioButtons = document.querySelectorAll('input[name="action"]');
+//     radioButtons.forEach(radioButton => {
+//       radioButton.addEventListener("change", displaySeaLevelDataOnMap);
+//     });
+
